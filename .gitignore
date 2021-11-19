@@ -1,0 +1,11 @@
+### Linux ###
+*~
+
+# user experiments directory
+/weight/
+/YOLOX_outputs/
+/datasets/VOCdevkit
+/.vscode/
+**/__pycache__
+# do not ignore datasets under yolox/data
+!*/yolox/data/datasets/

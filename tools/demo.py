@@ -6,13 +6,14 @@ import argparse
 import os
 import time
 from loguru import logger
-
+import sys 
+sys.path.append("./")
 import cv2
 
 import torch
 
 from yolox.data.data_augment import ValTransform
-from yolox.data.datasets import COCO_CLASSES
+from yolox.data.datasets import VOC_CLASSES
 from yolox.exp import get_exp
 from yolox.utils import fuse_model, get_model_info, postprocess, vis
 
@@ -22,18 +23,19 @@ IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
 def make_parser():
     parser = argparse.ArgumentParser("YOLOX Demo!")
     parser.add_argument(
-        "demo", default="image", help="demo type, eg. image, video and webcam"
+        "--demo", default="image", help="demo type, eg. image, video and webcam"
     )
     parser.add_argument("-expn", "--experiment-name", type=str, default=None)
-    parser.add_argument("-n", "--name", type=str, default=None, help="model name")
+    parser.add_argument("-n", "--name", type=str, default="yolox-s", help="model name")
 
     parser.add_argument(
-        "--path", default="./assets/dog.jpg", help="path to images or video"
+        "--path", default="./assets/2021_08_4716.jpg", help="path to images or video"
     )
     parser.add_argument("--camid", type=int, default=0, help="webcam demo camera id")
     parser.add_argument(
         "--save_result",
         action="store_true",
+        default=True,
         help="whether to save the inference result of image/video",
     )
 
@@ -41,7 +43,7 @@ def make_parser():
     parser.add_argument(
         "-f",
         "--exp_file",
-        default=None,
+        default="exps/example/yolox_voc/yolox_voc_s.py",
         type=str,
         help="pls input your experiment description file",
     )
@@ -79,7 +81,7 @@ def make_parser():
     parser.add_argument(
         "--trt",
         dest="trt",
-        default=False,
+        default=True,
         action="store_true",
         help="Using TensorRT model for testing.",
     )
@@ -102,7 +104,7 @@ class Predictor(object):
         self,
         model,
         exp,
-        cls_names=COCO_CLASSES,
+        cls_names=VOC_CLASSES,
         trt_file=None,
         decoder=None,
         device="cpu",
@@ -160,9 +162,8 @@ class Predictor(object):
                 outputs = self.decoder(outputs, dtype=outputs.type())
             outputs = postprocess(
                 outputs, self.num_classes, self.confthre,
-                self.nmsthre, class_agnostic=True
-            )
-            logger.info("Infer time: {:.4f}s".format(time.time() - t0))
+                self.nmsthre, class_agnostic=True)
+            logger.info("Infer time: {:.4f}s".format((time.time() - t0)))
         return outputs, img_info
 
     def visual(self, output, img_info, cls_conf=0.35):
@@ -299,7 +300,7 @@ def main(exp, args):
         decoder = None
 
     predictor = Predictor(
-        model, exp, COCO_CLASSES, trt_file, decoder,
+        model, exp, VOC_CLASSES, trt_file, decoder,
         args.device, args.fp16, args.legacy,
     )
     current_time = time.localtime()

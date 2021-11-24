@@ -6,7 +6,8 @@ import argparse
 import os
 import shutil
 from loguru import logger
-
+import sys 
+sys.path.append("./")
 import tensorrt as trt
 import torch
 from torch2trt import torch2trt
@@ -17,16 +18,16 @@ from yolox.exp import get_exp
 def make_parser():
     parser = argparse.ArgumentParser("YOLOX ncnn deploy")
     parser.add_argument("-expn", "--experiment-name", type=str, default=None)
-    parser.add_argument("-n", "--name", type=str, default=None, help="model name")
+    parser.add_argument("-n", "--name", type=str, default="yolox-s", help="model name")
 
     parser.add_argument(
         "-f",
         "--exp_file",
-        default=None,
+        default="exps/example/yolox_voc/yolox_voc_s.py",
         type=str,
         help="pls input your expriment description file",
     )
-    parser.add_argument("-c", "--ckpt", default=None, type=str, help="ckpt path")
+    parser.add_argument("-c", "--ckpt", default="YOLOX_outputs/yolox_voc_s/best_ckpt.pth", type=str, help="ckpt path")
     parser.add_argument(
         "-w", '--workspace', type=int, default=32, help='max workspace size in detect'
     )

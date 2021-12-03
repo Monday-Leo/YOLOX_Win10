@@ -17,10 +17,14 @@ class Exp(MyExp):
         self.warmup_epochs = 1
         
         # ---------- transform config ------------ #
-        self.mosaic_prob = 1.0
-        self.mixup_prob = 1.0
+        self.mosaic_prob = 0.5
+        self.mosaic_scale = (0.5, 1.5)
+        self.mixup_prob = 0.0
         self.hsv_prob = 1.0
         self.flip_prob = 0.5
+        self.enable_mixup = False
+
+        self.basic_lr_per_img = 0.01 / 16.0 
 
         self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
 

@@ -29,7 +29,7 @@ def make_parser():
     parser.add_argument("-n", "--name", type=str, default="yolox-s", help="model name")
 
     parser.add_argument(
-        "--path", default="./assets/2021_08_4716.jpg", help="path to images or video"
+        "--path", default="./images/2021_08_8828.jpg", help="path to images or video"
     )
     parser.add_argument("--camid", type=int, default=0, help="webcam demo camera id")
     parser.add_argument(
@@ -148,13 +148,14 @@ class Predictor(object):
         img_info["ratio"] = ratio
 
         img, _ = self.preproc(img, None, self.test_size)
+        t0 = time.time()
         img = torch.from_numpy(img).unsqueeze(0)
         img = img.float()
         if self.device == "gpu":
             img = img.cuda()
             if self.fp16:
                 img = img.half()  # to FP16
-
+        logger.info("pre-process time: {:.5f}s".format((time.time() - t0)))
         with torch.no_grad():
             t0 = time.time()
             outputs = self.model(img)

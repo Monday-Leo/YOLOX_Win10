@@ -7,5 +7,6 @@
 /datasets/VOCdevkit
 /.vscode/
 **/__pycache__
+/images
 # do not ignore datasets under yolox/data
 !*/yolox/data/datasets/

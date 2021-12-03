@@ -278,10 +278,10 @@ class VOCDetection(Dataset):
             mAP = self._do_python_eval(output_dir, iou)
             mAPs.append(mAP)
         
-        print("--------------------------------------------------------------")
-        print("map_5095:", np.mean(mAPs))
-        print("map_50:", mAPs[0])
-        print("--------------------------------------------------------------")
+        logger.info("--------------------------------------------------------------")
+        logger.info("map_5095: {:.2f}".format(np.mean(mAPs)*100))
+        logger.info("map_50: {:.2f}".format(np.mean(mAPs[0])*100))
+        logger.info("--------------------------------------------------------------")
         with open("./YOLOX_outputs/yolox_voc_s/eval.txt","a") as _f:
             _f.write("map_5095: " + str(np.mean(mAPs))+"\n")
             _f.write("map_50: " + str(mAPs[0])+"\n")

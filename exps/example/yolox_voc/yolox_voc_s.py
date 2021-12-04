@@ -14,17 +14,28 @@ class Exp(MyExp):
         self.num_classes = 42
         self.depth = 0.33
         self.width = 0.50
-        self.warmup_epochs = 1
-        
+        # ---------------- dataloader config ---------------- #
+        self.data_num_workers = 2
+        self.input_size = (640, 640)
+        self.multiscale_range = 3
         # ---------- transform config ------------ #
-        self.mosaic_prob = 0.5
-        self.mosaic_scale = (0.5, 1.5)
-        self.mixup_prob = 0.0
+        self.mosaic_prob = 0.0
+        self.degrees = 0.0
+        self.translate = 0.1
+        self.mosaic_scale = 0.5
+        self.shear = 0.0
+
+        self.enable_mixup = True
+        self.mixup_prob = 1.0
+        self.mixup_scale = (1.5, 1.5)
         self.hsv_prob = 1.0
         self.flip_prob = 0.5
-        self.enable_mixup = False
-
-        self.basic_lr_per_img = 0.01 / 16.0 
+        # --------------  training config --------------------- #
+        self.max_epoch = 100
+        self.warmup_epochs = 1
+        self.no_aug_epochs = 20
+        self.print_interval = 10
+        self.eval_interval = 2
 
         self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
 

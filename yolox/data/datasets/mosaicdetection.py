@@ -71,7 +71,7 @@ class MosaicDetection(Dataset):
         self.mosaic_prob = mosaic_prob
         self.mixup_prob = mixup_prob
         self.local_rank = get_local_rank()
-
+        
     def __len__(self):
         return len(self._dataset)
 
@@ -153,11 +153,20 @@ class MosaicDetection(Dataset):
             # -----------------------------------------------------------------
             return mix_img, padded_labels, img_info, np.array([img_id])
 
+        elif(self.enable_mixup and  self.enable_mosaic and self.mosaic_prob==0.0 and random.random() < self.mixup_prob ):
+            self._dataset._input_dim = self.input_dim
+            img, label, img_info, img_id = self._dataset.pull_item(idx)
+            mix_img, padded_labels = self.mixup(img, label, self.input_dim)
+            mix_img, padded_labels = self.preproc(mix_img, padded_labels, self.input_dim)
+            img_info = (mix_img.shape[1], mix_img.shape[0])
+            return mix_img, padded_labels, img_info, np.array([img_id])
+
         else:
             self._dataset._input_dim = self.input_dim
             img, label, img_info, img_id = self._dataset.pull_item(idx)
             img, label = self.preproc(img, label, self.input_dim)
             return img, label, img_info, np.array([img_id])
+
 
     def mixup(self, origin_img, origin_labels, input_dim):
         jit_factor = random.uniform(*self.mixup_scale)

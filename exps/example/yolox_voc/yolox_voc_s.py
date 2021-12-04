@@ -15,7 +15,7 @@ class Exp(MyExp):
         self.depth = 0.33
         self.width = 0.50
         # ---------------- dataloader config ---------------- #
-        self.data_num_workers = 2
+        self.data_num_workers = 1
         self.input_size = (640, 640)
         self.multiscale_range = 3
         # ---------- transform config ------------ #

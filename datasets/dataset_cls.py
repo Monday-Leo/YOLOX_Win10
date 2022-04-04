@@ -6,8 +6,8 @@ train_percent = 4
 xmlfilepath = './VOCdevkit/VOC2021/Annotations'
 txtsavepath = './VOCdevkit/VOC2021/ImageSets/Main'
 total_xml = os.listdir(xmlfilepath)
-test_dir = './VOCdevkit/VOC2021/val.txt'
-train_dir = './VOCdevkit/VOC2021/train.txt'
+test_dir = './VOCdevkit/VOC2021/ImageSets/Main/test.txt'
+train_dir = './VOCdevkit/VOC2021/ImageSets/Main/trainval.txt'
 ftest = open(test_dir, 'w')
 ftrain = open(train_dir, 'w')
 
@@ -39,9 +39,11 @@ def WriteDatasToFile(listInfo,dir):
 for i in range(len(total_xml)):
     name = total_xml[i][:-4]
     if i % (train_percent+1) != 0:
-        ftrain.write("./JPEGImages/"+name+".jpg ./Annotations/"+name+".xml\n")
+        # ftrain.write("./JPEGImages/"+name+".jpg ./Annotations/"+name+".xml\n")
+        ftrain.write(name + "\n")
     else:
-        ftest.write("./JPEGImages/"+name+".jpg ./Annotations/"+name+".xml\n")
+        # ftest.write("./JPEGImages/"+name+".jpg ./Annotations/"+name+".xml\n")
+        ftest.write(name + "\n")
 ftrain.close()
 ftest.close()
 
